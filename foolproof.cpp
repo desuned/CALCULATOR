@@ -1,38 +1,79 @@
 #include <iostream>
 #include <string>
 #include <regex>
+#include <vector>
 using namespace std;
 typedef string& sLink;
-
 smatch RegexFind(string s, string elem) {
 	smatch m;
 	regex rgxx = regex{ elem };
 	regex_search(s, m, rgxx);
 	return m;
 }
+vector<string> Split(string s, string elem) {
+	regex rgxx = regex{ elem };
+	sregex_token_iterator splitter{ s.begin(), s.end(), rgxx, -1 };
+	vector<string> vect{ splitter, {} };
+	return vect;
+}
 
 
-int EqualBrackets(sLink equation) {
+
+void GlobalReplace(sLink equation) {
+	equation = regex_replace(equation, regex{ ":" }, "/");
+	equation = regex_replace(equation, regex{ "sin" }, "s");
+	equation = regex_replace(equation, regex{ "cos" }, "c");
+	equation = regex_replace(equation, regex{ "tg" }, "t");
+	equation = regex_replace(equation, regex{ "ln" }, "n");
+	equation = regex_replace(equation, regex{ "lb" }, "b");
+	equation = regex_replace(equation, regex{ "sqrt" }, "r");
+	equation = regex_replace(equation, regex{ "pi" }, "p");
+}
+// warning with error + return
+	/* READ ME
+		maybe do a message with position of unclosed brackets
+	*/
+int NoIncorrectSymbols(sLink equation, bool needRemove) {
+	string pattern = "[^0-9-+*/^()sctnbrep]";
+	smatch sm = RegexFind(equation, pattern);
+	if (needRemove) 
+		equation = regex_replace(equation, regex{pattern}, "");
+	return sm.empty();
+}
+int EqualBrackets(sLink equation) { 
 	int cnt = 0;
 	for (int i = 0; i < equation.size(); i++) {
 		if (equation[i] == '(') cnt++;
-		if (equation[i] == ')') cnt--; 
+		if (equation[i] == ')') cnt--;
 	}
-	return cnt == 0; 
+	return cnt == 0;
 }
-int NoIncorrectSymbols(sLink equation) {
-	// [^0-9-+^*().] + sin, cos, ln, lb
-	return 1;
+int SignsCorrect(sLink equation) {
+	string pattern; smatch sm;
+	// (x+)*y
+	pattern = "[-+*/^])";
+	sm = RegexFind(equation, pattern);
+	if (!sm.empty()) return 0;
+	// (+x)-y
+	pattern = "([-+*/^]";
+	sm = RegexFind(equation, pattern);
+	if (!sm.empty()) return 0;
+	// following signs
+	pattern = "[-+*/^]{2,}";
+	sm = RegexFind(equation, pattern); 
+	return sm.empty();
 }
-int NoFollowingOperations(sLink equation) {
-	// [+*-/^]{2,} ig
-	return 1;
+int ArgumentsExist(sLink equation) { 
+	string pattern; smatch sm; 
+	// sin^) was in SingsCorrect();
+	// sin^+ was in SingsCorrect();
+	// sin^( or sin^3 or sin^ln.. is ok 
+	// so here only case sin3 or sinln or sin+
+	pattern = "[sctnbr][^(^]";
+	sm = RegexFind(equation, pattern); 
+	return sm.empty();
 }
-int TrigonometryIsCorrect(sLink equation) {
-	// [{sin}{cos}{tg}{ln}{lb}][^(] -- sin4 for example
-	// idk, it's comlicated
-	return 1;
-}
+
 int NoDividingByZero(sLink equation) {
 	// check x/ln(1)
 	// check x/lb(1)
@@ -41,25 +82,24 @@ int NoDividingByZero(sLink equation) {
 	// check x/cos(k*pi/2)
 	return 1;
 }
-int NoSignsWithBracket(sLink equation) {
-	// (x+)*y
-	// (+x)-y
-	return 1;
-} 
-int CorrectArguments(sLink equation) {
-	// positive args on ln, lb, sqrt 
+int ArgumentsCorrect(sLink equation) {
+	// positive args in sqrt 
+	// arg > 0 in ln, lb, 
 	// tg with args != pi*k/2
-	// 
+
+	// do it after calc args in func, it's easier
 	return 1;
 }
 
 
-
+// hard thing is ln(ln(ln(2))) or something like that
 int main() {
-	string testEquation = "sin(f)+cos(5)-sin51\n";
-	
-	smatch test = RegexFind(testEquation, "sin[^(]"); 
-	cout << test.empty() << "\n";
+	string equation = "5 + sin(3)";
+	string equationSaver = equation;
+	GlobalReplace(equation);
+
+	cout << equation << "\n";
+	cout << ArgumentsExist(equation) << "\n";
 
 	system("pause");
 }
