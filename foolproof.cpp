@@ -6,8 +6,9 @@ using namespace std;
 typedef string& sLink;
 smatch RegexFind(string s, string elem) {
 	smatch m;
-	regex rgxx = regex{ elem };
+	regex rgxx (elem); 
 	regex_search(s, m, rgxx);
+	cout << &m << "\n";
 	return m;
 }
 vector<string> Split(string s, string elem) {
@@ -20,7 +21,13 @@ vector<string> Split(string s, string elem) {
 
 
 void GlobalReplace(sLink equation) {
+	while (!RegexFind(equation, "[(][)]").empty())
+		equation = regex_replace(equation, regex{ "[(][)]" }, "");
+	equation = regex_replace(equation, regex{ "[ ]{1,}" }, "");
+	equation = regex_replace(equation, regex{ "[)][(]" }, ")*(");
 	equation = regex_replace(equation, regex{ ":" }, "/");
+
+
 	equation = regex_replace(equation, regex{ "sin" }, "s");
 	equation = regex_replace(equation, regex{ "cos" }, "c");
 	equation = regex_replace(equation, regex{ "tg" }, "t");
@@ -64,12 +71,8 @@ int SignsCorrect(sLink equation) {
 	return sm.empty();
 }
 int ArgumentsExist(sLink equation) { 
-	string pattern; smatch sm; 
-	// sin^) was in SingsCorrect();
-	// sin^+ was in SingsCorrect();
-	// sin^( or sin^3 or sin^ln.. is ok 
-	// so here only case sin3 or sinln or sin+
-	pattern = "[sctnbr][^(^]";
+	string pattern; smatch sm;
+	pattern = "[sctnbr][^(]";
 	sm = RegexFind(equation, pattern); 
 	return sm.empty();
 }
@@ -94,12 +97,37 @@ int ArgumentsCorrect(sLink equation) {
 
 // hard thing is ln(ln(ln(2))) or something like that
 int main() {
-	string equation = "5 + sin(3)";
-	string equationSaver = equation;
-	GlobalReplace(equation);
+	// string equation = "sin(sin(4+3*(1+1)))*8+(34-7)"; 
+	// string equationSaver = equation;
+	// GlobalReplace(equation); 
 
-	cout << equation << "\n";
-	cout << ArgumentsExist(equation) << "\n";
+	/*
+	string equation = "s(3+30)*c(n(7))-t(8)+20";
+	smatch sm = RegexFind(equation, "[sctnbr][(].{1,}[)]"); 
+	*/
+	string equation = "hjfas5464sad11s2";
+	smatch sm = RegexFind(equation, "[0-9]+");
+	smatch sm2 = RegexFind(equation, "[0-9]+");
+	smatch* smPtr = &RegexFind(equation, "[0-9]+");
+	cout << "----\n";
+	cout << smPtr << "\n";
+	cout << sm.prefix() << "\n";
+	cout << sm.suffix() << "\n";
+	cout << sm.str() << "\n";
+	cout << &sm << "\n"; 
+	 
+
+	// sin(sin(4+3*(1+1)))*8+(34-7) 
+
+	// get last "[sctnbr][(].{1,}[)]",
+	// maybe try split with [^]
+
+	// so last for example is string lastFunc
+
+	// string funcArg = CalcArgument(lastFunc);
+	// string funcValue = CalcFunc(lastFunc, funcArg);
+	// equation = regex_replace(lastFunc, funcValue);
+
 
 	system("pause");
 }
