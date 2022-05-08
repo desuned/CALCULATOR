@@ -67,7 +67,7 @@ int SignsCorrect(sLink equation) {
 	pattern = "[-+/*^])"; 
 	if (RegexFind(equation, pattern)) return 0;
 	// (+x)-y
-	pattern = "([-+/*^]"; 
+	pattern = "([+/*^]"; 
 	if (RegexFind(equation, pattern)) return 0;
 	// following signs
 	pattern = "[-+/*^]{2,}"; 
@@ -189,50 +189,64 @@ double evaluatePrefix(string equation) {
 }
 
 
-double CalcArgument(string func) {
+
+string GetSimpleFunc(sLink equation) {
+	smatch sm;
+	regex_search(equation, sm,
+		regex{ "[sctnbr][(][^sctnbr]{1,}[)]" });
+	if (sm.empty()) return "";
+	string simpleFunc = sm.str();
+	// hard fix of [^sctnbr]{1,}[)] 
+	while (!EqualBrackets(simpleFunc)) Replace(simpleFunc, "[)]$", "");
+	return simpleFunc;
+}
+double CalcArg(string func) {
 	// some magic where I get from (1+1) 2  
 	// and (e+1) gives me e+1 I hope it's possible
 	Replace(func, "[sctnbr][(]{1}|[)]{1}$", "");
 	func = infixToPrefix(func); 
 	return evaluatePrefix(func);
 }
-double CalcFunc(char func, double arg) {
-	double result;
-	if		(func == 's') result = sin(arg*deg);
-	else if (func == 'c') result = cos(arg*deg);
-	else if (func == 't') result = tan(arg*deg);
-	else if (func == 'n') result = log(arg);
-	else if (func == 'b') result = log2(arg);
-	else if (func == 'r') result = sqrt(arg);
-	return result;
+int CalcFunc(sLink simpleFunc, double* arg) {
+	double funcArg = CalcArg(simpleFunc);
+	cout << "\n    Arg is: " << funcArg;
+	if (!ArgumentsCorrect(simpleFunc[0], funcArg)) return 0;
+	double result; char func = simpleFunc[0];
+	if		(func == 's') result = sin(funcArg*deg);
+	else if (func == 'c') result = cos(funcArg*deg);
+	else if (func == 't') result = tan(funcArg*deg);
+	else if (func == 'n') result = log(funcArg);
+	else if (func == 'b') result = log2(funcArg);
+	else if (func == 'r') result = sqrt(funcArg);
+
+	*arg = result;
+	return 1;
 }
-
-
-int main() {
-	string equation = "sin(tg(3*(2^3)))*cos(ln(7))-tg(8)+20"; 
-	string equationSaver = equation;
-	GlobalReplace(equation);   
-
-	smatch sm; 
-	regex_search(equation, sm, 
-		regex{ "[sctnbr][(][^sctnbr]{1,}[)]" });
-	 
-	string simpleFunc = sm.str(); 
-	// hard fix of [^sctnbr]{1,}[)] 
-	while (!EqualBrackets(simpleFunc)) Replace(simpleFunc, "[)]$", ""); 
-
-	double funcArg = CalcArgument(simpleFunc);
-	// if !ArgumentsCorrect(simpleFunc[0], funcArg) return
-	double funcValue = CalcFunc(simpleFunc[0], funcArg); 
+void SetFuncValue(sLink equation, sLink simpleFunc, double value) {
 	Replace(simpleFunc, "\\(", "\\(");
 	Replace(simpleFunc, "\\)", "\\)");
 	Replace(simpleFunc, "\\*", "\\*");
 	Replace(simpleFunc, "\\^", "\\^");
-	Replace(equation, simpleFunc, to_string(funcValue));
+	Replace(equation, simpleFunc, to_string(value));
+}
 
 
+int main() {
+	string equation = "sin(tg(3*(2^3)))*cos(ln(7))-ln(1)+20*sqrt(3)"; 
+	string equationSaver = equation;
+	GlobalReplace(equation);   
 
-
+	int cnt = 1; 
+	while (1) {
+		string simpleFunc = GetSimpleFunc(equation); 
+		if (simpleFunc == "") break;
+		cout << "\n  " << cnt << ". " << simpleFunc;
+		double funcValue;
+		if (!CalcFunc(simpleFunc, &funcValue)) break; 
+		SetFuncValue(equation, simpleFunc, funcValue);
+		cnt++;
+	}
+	cout << "\n  " << equation << "\n";
 	/*
 	string a = "a";
 	double v = 1.123123123123; 
