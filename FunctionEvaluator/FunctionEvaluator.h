@@ -1,11 +1,12 @@
-#ifndef CONVERTERFUNCS_H
-#define CONVERTERFUNCS_H
-#include "references.h"
-class ConverterFuncs {
+#ifndef FUNCTIONEVALUATOR_H
+#define FUNCTIONEVALUATOR_H
+#include "../refs/refs.h"
+#include "../refs/calc.h"
+class FunctionEvaluator {
 public:
 	string equation;
 	sPtr eqPtr;
-	ConverterFuncs(sPtr);
+	FunctionEvaluator(sPtr);
 	string GetSimpleFunc();
 	void SetFuncValue(sLink, double);
 	double CalcArg(string);

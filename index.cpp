@@ -1,17 +1,19 @@
-#include "references.h"
-#include "FoolProof.cpp"
-#include "ConverterFuncs.cpp"
+#include "refs/refs.h"
+#include "FoolProof/FoolProof.cpp"
+#include "FunctionEvaluator/FunctionEvaluator.cpp"
 int main() {
-	string equation = "sin(tg(3*(2^3)))*cos(ln(7))+ln(1)+20*root(3)*cos(3)";
+	string equation = "sin(tg(3*(2^3)))*cos(ln(7))+ln(1)+20*root(3)*cos(120)";
 
 	FoolProof FoolProof(&equation);
-	ConverterFuncs Converter(&equation);
+	FunctionEvaluator Converter(&equation);
 
 	int correct = FoolProof.AllCorrect();
 	if (correct) {
 		Converter.CalcAllFunctions();
 		correct = FoolProof.NoDivisionByZero();
 	}
+
+	cout << "\n  " << cos(120 * deg);
 
 	if (correct) cout << "\n  Equation's totally correct!";
 	else cout << "\n  Equation's wrong!";
