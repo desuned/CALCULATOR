@@ -1,1 +1,1 @@
-better directories
+edit: now FunctionEvaluator calculates brackets too

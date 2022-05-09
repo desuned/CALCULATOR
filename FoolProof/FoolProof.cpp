@@ -87,19 +87,24 @@ int FoolProof::ArgumentsExist() {
 		if (func[0] == 'n') func = "ln";
 		if (func[0] == 'b') func = "lb";
 		if (func[0] == 'r') func = "root";
-		cout << "\n  error (fp4): function " << func << "has no argument.";
+		cout << "\n  error (fp4): function " << func << " has no argument.";
 		return 0;
 	}
 	return 1;
 }
-int FoolProof::NoDivisionByZero() {
+int FoolProof::CorrectZeros() {
 	this->equation = *(this->eqPtr);
+	if (RegexFind(this->equation, "[/*-+^]0[0-9]{1,}")) {
+		cout << "\n  error (fp5.1): number can't be more than 2 symbols"
+			<< "starting with a 0 without '.'.";
+		return 0;
+	};
 	if (RegexFind(this->equation, "/0[^/*-+^.]")) { 
-		cout << "\n  error (fp5): division by zero.";
+		cout << "\n  error (fp5.2): division by zero.";
 		return 0;
 	};
 	if (RegexFind(this->equation, "/0\\.[0]{1,}[/*-+^]")) {
-		cout << "\n  error (fp5): division by zero.";
+		cout << "\n  error (fp5.2): division by zero.";
 		return 0;
 	}; 
 	return 1;
@@ -110,6 +115,6 @@ int FoolProof::AllCorrect() {
 	if (!(this->EqualBrackets())) return 0;
 	if (!(this->SignsCorrect())) return 0;
 	if (!(this->ArgumentsExist())) return 0;
-	if (!(this->NoDivisionByZero())) return 0;
+	if (!(this->CorrectZeros())) return 0;
 	return 1;
 }

@@ -11,7 +11,7 @@ public:
 	int EqualBrackets();
 	int SignsCorrect();
 	int ArgumentsExist();
-	int NoDivisionByZero();
+	int CorrectZeros();
 
 	int AllCorrect();
 }; 
