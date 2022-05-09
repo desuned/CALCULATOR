@@ -7,8 +7,10 @@
 #include <sstream>
 #include <iomanip>
 using namespace std;
+
 const double deg = 3.1415926535 / 180.0;
 typedef string& sLink;
+typedef string* sPtr;
 int RegexFind(string s, string elem) {
 	smatch m;
 	regex rgxx(elem);
@@ -18,100 +20,6 @@ int RegexFind(string s, string elem) {
 void Replace(string& s, string pattern, string replacer) {
 	s = regex_replace(s, regex{ pattern }, replacer);
 }
-
-
-void GlobalReplace(sLink equation) {
-	while (RegexFind(equation, "[(][)]"))
-		Replace(equation, "[(][)]", "");
-	Replace(equation, "[ ]{1,}", "");
-	Replace(equation, "[)][(]", ")*(");
-	Replace(equation, ":", "/");
-
-
-	Replace(equation, "sin", "s");
-	Replace(equation, "cos", "c");
-	Replace(equation, "tg", "t");
-	Replace(equation, "ln", "n");
-	Replace(equation, "lb", "b");
-	Replace(equation, "sqrt", "r");
-
-	Replace(equation, "pi", "3.1415926535");
-	Replace(equation, "e", "2.7182818284");
-}
-
-class FoolProof {
-public:
-	string equation;
-	FoolProof(string);
-	int NoIncorrectSymbols(bool);
-	int EqualBrackets();
-	int SignsCorrect();
-	int ArgumentsExist();
-	int NoDividingByZero();
-	// int ArgumentsCorrect(char equation, double arg);
-
-	int AllCorrect();
-};
-
-
-
-// warning with error + return
-	/* READ ME
-		maybe do a message with position of unclosed brackets
-	*/
-FoolProof::FoolProof(string equation) {
-	this->equation = equation;
-}
-int FoolProof::NoIncorrectSymbols(bool needRemove) {
-	string pattern = "[^0-9-+/*^()sctnbrep]";
-	if (needRemove)
-		this->equation = regex_replace(this->equation, regex{pattern}, "");
-	return !RegexFind(this->equation, pattern);
-}
-int FoolProof::EqualBrackets() {
-	int cnt = 0;
-	for (int i = 0; i < this->equation.size(); i++) {
-		if (this->equation[i] == '(') cnt++;
-		if (this->equation[i] == ')') cnt--;
-	}
-	return cnt == 0;
-}
-int FoolProof::SignsCorrect() { 
-	string pattern;
-	pattern = "[-+/*^]\\)";
-	if (RegexFind(this->equation, pattern)) return 0;
-	pattern;
-	// (x+)*y
-	pattern = "[-+/*^]\\)";
-	if (RegexFind(this->equation, pattern)) return 0;
-	// (+x)-y
-	pattern = "\\([+/*^]";
-	if (RegexFind(this->equation, pattern)) return 0;
-	// following signs
-	pattern = "[-+/*^]{2,}";
-	return !RegexFind(this->equation, pattern);
-}
-int FoolProof::ArgumentsExist() {
-	string pattern;
-	pattern = "[sctnbr][^(]";
-	return !RegexFind(this->equation, pattern);
-}
-int FoolProof::NoDividingByZero() {
-	return !RegexFind(this->equation, "/0");
-}
-int FoolProof::AllCorrect() {
-	if (!(this->NoIncorrectSymbols(0))) return 0;
-	if (!(this->EqualBrackets())) return 0;
-	if (!(this->SignsCorrect())) return 0;
-	if (!(this->ArgumentsExist())) return 0;
-	if (!(this->NoDividingByZero())) return 0;
-	return 1;
-}
-
-
-class FuncReplacer {
-
-};
 
 
 int GetPriority(char c) {
@@ -204,9 +112,125 @@ double evaluatePrefix(string equation) {
 }
 
 
-string GetSimpleFunc(sLink equation) {
+
+
+void GlobalReplace(sLink equation) {
+	while (RegexFind(equation, "[(][)]"))
+		Replace(equation, "[(][)]", "");
+	Replace(equation, "[ ]{1,}", "");
+	Replace(equation, "[)][(]", ")*(");
+	Replace(equation, ":", "/");
+
+
+	Replace(equation, "sin", "s");
+	Replace(equation, "cos", "c");
+	Replace(equation, "tg", "t");
+	Replace(equation, "ln", "n");
+	Replace(equation, "lb", "b");
+	Replace(equation, "sqrt", "r");
+
+	Replace(equation, "pi", "3.1415926535");
+	Replace(equation, "e", "2.7182818284");
+}
+// warning with error + return
+// maybe do a message with position of unclosed brackets
+class FoolProof {
+public:
+	string equation;
+	sPtr eqPtr;
+	FoolProof(sPtr);
+	int NoIncorrectSymbols(bool);
+	int EqualBrackets();
+	int SignsCorrect();
+	int ArgumentsExist();
+	int NoDividingByZero();
+	// int ArgumentsCorrect(char equation, double arg);
+
+	int AllCorrect();
+};
+FoolProof::FoolProof(sPtr eqPtr) {
+	this->equation = *eqPtr; 
+	this->eqPtr = eqPtr;
+}
+int FoolProof::NoIncorrectSymbols(bool needRemove) {
+	string pattern = "[^0-9-+/*^()sctnbrep]";
+	if (needRemove)
+		this->equation = regex_replace(this->equation, regex{pattern}, "");
+	return !RegexFind(this->equation, pattern);
+}
+int FoolProof::EqualBrackets() {
+	int cnt = 0;
+	for (int i = 0; i < this->equation.size(); i++) {
+		if (this->equation[i] == '(') cnt++;
+		if (this->equation[i] == ')') cnt--;
+	}
+	return cnt == 0;
+}
+int FoolProof::SignsCorrect() { 
+	string pattern;
+	pattern = "[-+/*^]\\)";
+	if (RegexFind(this->equation, pattern)) return 0;
+	pattern;
+	// (x+)*y
+	pattern = "[-+/*^]\\)";
+	if (RegexFind(this->equation, pattern)) return 0;
+	// (+x)-y
+	pattern = "\\([+/*^]";
+	if (RegexFind(this->equation, pattern)) return 0;
+	// following signs
+	pattern = "[-+/*^]{2,}";
+	return !RegexFind(this->equation, pattern);
+}
+int FoolProof::ArgumentsExist() {
+	string pattern;
+	pattern = "[sctnbr][^(]";
+	return !RegexFind(this->equation, pattern);
+}
+int FoolProof::NoDividingByZero() {
+	this->equation = *(this->eqPtr);
+	if (RegexFind(this->equation, "/0[^/*-+^.]")) return 0;
+	if (RegexFind(this->equation, "/0\\.[0]{1,}[/*-+^]")) return 0;
+	return 1;
+}
+int FoolProof::AllCorrect() {
+	if (!(this->NoIncorrectSymbols(0))) return 0;
+	if (!(this->EqualBrackets())) return 0;
+	if (!(this->SignsCorrect())) return 0;
+	if (!(this->ArgumentsExist())) return 0;
+	if (!(this->NoDividingByZero())) return 0;
+	return 1;
+}
+
+
+class ConverterFuncs {
+public: 
+	string equation;
+	sPtr eqPtr;
+	ConverterFuncs(sPtr);
+	string GetSimpleFunc();
+	void SetFuncValue(sLink, double);
+	double CalcArg(string);
+	int ArgumentsCorrect(char, double);
+	int CalcFunc(sLink, double*);
+
+	int CalcAllFunctions();
+};
+ConverterFuncs::ConverterFuncs(sPtr eqPtr) {
+	this->equation = *eqPtr;
+	this->eqPtr = eqPtr;
+}
+void ConverterFuncs::SetFuncValue(sLink simpleFunc, double value) {
+	Replace(simpleFunc, "\\(", "\\(");
+	Replace(simpleFunc, "\\)", "\\)");
+	Replace(simpleFunc, "\\*", "\\*");
+	Replace(simpleFunc, "\\^", "\\^");
+	Replace(this->equation, simpleFunc, to_string(value));
+	// for outer equation variable
+	*(this->eqPtr) = this->equation;
+}
+string ConverterFuncs::GetSimpleFunc() {
 	smatch sm;
-	regex_search(equation, sm,
+	regex_search(this->equation, sm,
 		regex{ "[sctnbr][(][^sctnbr]{1,}[)]" });
 	if (sm.empty()) return "";
 	string simpleFunc = sm.str();
@@ -222,21 +246,14 @@ string GetSimpleFunc(sLink equation) {
 	}
 	return simpleFunc;
 }
-void SetFuncValue(sLink equation, sLink simpleFunc, double value) {
-	Replace(simpleFunc, "\\(", "\\(");
-	Replace(simpleFunc, "\\)", "\\)");
-	Replace(simpleFunc, "\\*", "\\*");
-	Replace(simpleFunc, "\\^", "\\^");
-	Replace(equation, simpleFunc, to_string(value));
-}
-double CalcArg(string func) {
+double ConverterFuncs::CalcArg(string func) {
 	// some magic where I get from (1+1) 2  
 	// and (e+1) gives me e+1 I hope it's possible
 	Replace(func, "[sctnbr][(]{1}|[)]{1}$", "");
 	func = infixToPrefix(func);
 	return evaluatePrefix(func);
 }
-int ArgumentsCorrect(char equation, double arg) {
+int ConverterFuncs::ArgumentsCorrect(char equation, double arg) {
 	if (equation == 't')
 		if (cos(arg) == 0) return 0;
 	if (equation == 'n')
@@ -247,7 +264,7 @@ int ArgumentsCorrect(char equation, double arg) {
 		if (arg < 0) return 0;
 	return 1;
 }
-int CalcFunc(sLink simpleFunc, double* arg) {
+int ConverterFuncs::CalcFunc(sLink simpleFunc, double* arg) {
 	double funcArg = CalcArg(simpleFunc);
 	if (!ArgumentsCorrect(simpleFunc[0], funcArg)) return 0;
 	double result; char func = simpleFunc[0];
@@ -261,15 +278,13 @@ int CalcFunc(sLink simpleFunc, double* arg) {
 	*arg = result;
 	return 1;
 }
-
-
-int CalcAllFunctions(sLink equation) {
+int ConverterFuncs::CalcAllFunctions() {
 	while (1) {
 		double funcValue;
-		string simpleFunc = GetSimpleFunc(equation);
+		string simpleFunc = this->GetSimpleFunc();
 		if (simpleFunc == "") break;
-		if (!CalcFunc(simpleFunc, &funcValue)) return 0;
-		SetFuncValue(equation, simpleFunc, funcValue);
+		if (!this->CalcFunc(simpleFunc, &funcValue)) return 0;
+		this->SetFuncValue(simpleFunc, funcValue);
 	}
 	return 1;
 }
@@ -277,18 +292,25 @@ int CalcAllFunctions(sLink equation) {
 
 
 int main() {
-	string equation = "sin(tg(3*(2^3)))*cos(ln(7))-ln(1)+20*sqrt(3)";
+	string equation = "sin(tg(3*(2^3)))*cos(ln(7))+ln(1)+20*sqrt(3)";
 	GlobalReplace(equation);
 
+	FoolProof FoolProof(&equation); 
+	ConverterFuncs Converter(&equation);
 
-	FoolProof Equation(equation);
-	cout << "\n  " << Equation.AllCorrect();
+	int correct = FoolProof.AllCorrect();
+	if (correct) Converter.CalcAllFunctions();
+	correct = FoolProof.NoDividingByZero();
 
 
-	CalcAllFunctions(equation);
+	if (correct) cout << "\n  Equation's totally correct!";
+	else cout << "\n  Equation's wrong!";
 	cout << "\n  " << equation << "\n";
 
-
+	free(&equation);
+	free(&correct);
+	free(&FoolProof);
+	free(&Converter);
 
 	system("pause");
 }

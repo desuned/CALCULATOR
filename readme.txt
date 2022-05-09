@@ -1,10 +1,9 @@
 new:
-1.   Created FoolProof class with 5/6 old foolproof funcs
-2.   Wrote AllCorrect() func that checks all of 5/6 old foolproof funcs
+1. 	ConverterFuncs class where all functions replaced to 
+	the corresponding values
+2. 	typedef string* sPtr
 edit:
-3.   Removed '-' from 2nd  regex in FoolProof::SignsCorrect()
-  cuz (-3) is a normal case
-4.   + in SingsCorrect() in regexes put \\ before ( and )
-5.   Changed GetSimpleFunc(), now there's a liiiitle repeating of code
-  instead of creating new class every time func was called.
-6.   Did replacing of 'pi' and 'e' in GlobalReplace() on doubles
+1. 	DividingByZero now's better: not just a /0.
+2. 	Replaced infix evaluate on the top
+3. 	Added attr 'sPtr eqPtr' in classes FoolProof and ConverterFuncs
+	for posibility of changing outer equation in classes. 
