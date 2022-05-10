@@ -21,6 +21,23 @@ void FoolProof::GlobalReplace() {
 	Replace(this->equation, "pi", "3.141592653");
 	Replace(this->equation, "e", "2.7182818284");
 
+	// 5(1+1) -> 5*(1+1);
+	smatch sm;
+	regex pattern("[0-9]{1,}[(]{1}");
+	regex_search(this->equation, sm, pattern); 
+	while (1) {
+		if (!sm.empty()) {
+			string thisPart = sm.str();
+			string regexPart = sm.str();
+			Replace(thisPart, "[(]{1}", "*(");
+			Replace(regexPart, "\\(", "\\("); 
+			this->equation = regex_replace(this->equation,
+				regex{regexPart}, thisPart, regex_constants::format_first_only);
+			regex_search(this->equation, sm, pattern);
+		}
+		else break;
+	}
+
 	*(this->eqPtr) = this->equation;
 }
 int FoolProof::NoIncorrectSymbols(bool needRemove) {
@@ -56,19 +73,30 @@ int FoolProof::SignsCorrect() {
 	// (x+)*y
 	pattern = "[-+/*^]\\)"; 
 	if (RegexFind(this->equation, pattern)) {
-		cout << "\n  error (fp3): there's operation sign right before closing bracket.";
+		cout << "\n  error (fp3.1): there's operation sign right before closing bracket.";
 		return 0;
 	}
 	// (+x)-y
 	pattern = "\\([+/*^]";
 	if (RegexFind(this->equation, pattern)) {
-		cout << "\n  error (fp3): there's operation sign right after opening bracket.";
+		cout << "\n  error (fp3.2): there's operation sign right after opening bracket.";
 		return 0;
 	}
 	// following signs
 	pattern = "[-+/*^]{2,}";
 	if (RegexFind(this->equation, pattern)) {
-		cout << "\n  error (fp3): there's two or more following operation sings.";
+		cout << "\n  error (fp3.3): there's two or more following operation sings.";
+		return 0;
+	}
+	// 
+	pattern = "^[+/*^]+";
+	if (RegexFind(this->equation, pattern)) {
+		cout << "\n  error (fp3.4): there's operation sign in the start of equation";
+		return 0;
+	}
+	pattern = "[+/*^]+$";
+	if (RegexFind(this->equation, pattern)) {
+		cout << "\n  error (fp3.5): there's operation sign in the end of equation";
 		return 0;
 	}
 	return 1;
