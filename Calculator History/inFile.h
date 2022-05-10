@@ -7,6 +7,25 @@ using namespace std;
 
 int hCounter = 0;
 
+int findCounter() {
+	ifstream calcFile("Calculator History.txt");
+	
+	if (!calcFile.is_open())  {
+		cout << "\n   #File opening error accused!#   \n";
+		return 0;
+	}
+	
+	if (calcFile.peek() == EOF) return 0;
+	
+	while(calcFile) {
+		string tmpLine;
+		getline(calcFile, tmpLine);
+		hCounter++;
+	}
+	
+	hCounter--;
+}
+
 void Replace(string& s, string pattern, string replacer) {
 	s = regex_replace(s, regex{ pattern }, replacer);
 }
