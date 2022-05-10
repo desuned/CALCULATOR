@@ -1,16 +1,16 @@
-#include "FunctionEvaluator.h"
+#include "Calculator.h"
 int ArrayFind(vector<string>* arr, char elem) {
 	for (int i = 0; i < (*arr).size(); i++)
 		if (((*arr)[i])[0] == elem) return i;
 	return -1;
 }
 // constructor 
-FunctionEvaluator::FunctionEvaluator(sPtr eqPtr) {
+Calculator::Calculator(sPtr eqPtr) {
 	this->equation = *eqPtr;
 	this->eqPtr = eqPtr;
 }
 
-string FunctionEvaluator::GetSimpleFunc() {
+string Calculator::GetSimpleFunc() {
 	smatch sm;
 	// if there's cstnbr then there's ( so I just check ( instead of cst..
 	regex_search(this->equation, sm,
@@ -29,7 +29,7 @@ string FunctionEvaluator::GetSimpleFunc() {
 	}
 	return simpleFunc;
 }
-string FunctionEvaluator::GetArgument(string equation) { 
+string Calculator::GetArgument(string equation) {
 	Replace(equation, "^.{0,1}[(]+|[)]+$", "");
 	Replace(equation, "^-", "0-"); 
 	vector<string> nums = Split(equation, "[^.0-9]+");
@@ -57,7 +57,7 @@ string FunctionEvaluator::GetArgument(string equation) {
 			cout << "\n\t" << left
 				<< " " << signs[i]
 				<< " " << right << " = ";
-			if (signs[i] == "/" && right == 0) return "";
+			if (signs[i] == "/" && right == 0) return ""; 
 			// *-, /-, --, +-, ^- cases
 			if (signs[i].size() == 2) right *= -1;
 			if (loopSign == '^')
@@ -81,26 +81,43 @@ string FunctionEvaluator::GetArgument(string equation) {
 	return nums[0];
 }
 
-int FunctionEvaluator::ArgumentsCorrect(char equation, double arg) {
+int Calculator::ArgumentCorrect(char equation, double arg) {
 	// 4th digit round;
 	if (equation == 't')
-		if (int(10000*cos(arg))/1000 == 0) return 0;
+		if (int(10000 * cos(arg)) / 1000 == 0) {
+			cout << "\n  error(c1.1): tg from pi*k/2 (k belongs R) is not defined";
+			return 0;
+		}
 	if (equation == 'n')
-		if (arg <= 0) return 0;
+		if (arg <= 0) {
+			if (arg == 0) cout << "\n  error (c1.22): ln(0) is not defined";
+			else cout << "\n   error(c1.21): ln from negative argument is not defined";
+			return 0;
+		}
 	if (equation == 'b')
-		if (arg <= 0) return 0;
+		if (arg <= 0) {
+			if (arg == 0) cout << "\n  error (c1.22): lb(0) is not defined";
+			else cout << "\n  error(c1.22): lb from negative argument is not defined";
+			return 0;
+		}
 	if (equation == 'r')
-		if (arg < 0) return 0;
+		if (arg < 0) {
+			cout << "\n  error(c1.3): root from negative argument is not defined";
+			return 0;
+		}
 	return 1;
 }
-int FunctionEvaluator::CalcFunc(sLink simpleFunc, double* arg) {
+int Calculator::CalcFunc(sLink simpleFunc, double* arg) {
 	cout << "\n\n\n  simpleFunc: " << simpleFunc;
 	string funcArgStr = this->GetArgument(simpleFunc);
-	if (funcArgStr == "") return 0; 
+	if (funcArgStr == "") {
+		cout << "\n  error(c0): division by zero.";
+		return 0;
+	}
 	double funcArg = stod(funcArgStr);
 	cout << "\n  funcArg: " << funcArg;
 	double result; char func = simpleFunc[0];
-	if (!this->ArgumentsCorrect(func, funcArg)) return 0; 
+	if (!this->ArgumentCorrect(func, funcArg)) return 0;
 	
 	if		(func == 's') result = sin(funcArg);
 	else if (func == 'c') result = cos(funcArg);
@@ -113,7 +130,7 @@ int FunctionEvaluator::CalcFunc(sLink simpleFunc, double* arg) {
 	*arg = result;
 	return 1;
 }
-void FunctionEvaluator::ReplaceFuncValue(sLink simpleFunc, double value) {
+void Calculator::ReplaceFuncValue(sLink simpleFunc, double value) {
 	string replacer = "";
 	if (!RegexFind(simpleFunc, "^[sctnbr(]")) replacer += simpleFunc[0];
 	replacer += to_string(value); 
@@ -129,9 +146,8 @@ void FunctionEvaluator::ReplaceFuncValue(sLink simpleFunc, double value) {
 	*(this->eqPtr) = this->equation;
 }
 
-int FunctionEvaluator::CalcAllFunctions() {
-	this->equation = *(this->eqPtr);
-
+int Calculator::Calculate() {
+	this->equation = *(this->eqPtr); 
 	while (1) {
 		double funcValue; 
 		string simpleFunc = this->GetSimpleFunc();  
@@ -142,7 +158,6 @@ int FunctionEvaluator::CalcAllFunctions() {
 		cout << "\n  Current equation: " << this->equation;
 	}
 	cout << "\n\n";
-	this->equation = GetArgument(this->equation);
-	*(this->eqPtr) = this->equation;
-	return !(this->equation == "");
+	*(this->eqPtr) = GetArgument(this->equation); 
+	return !(*(this->eqPtr) == "");
 }

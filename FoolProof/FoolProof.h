@@ -10,6 +10,7 @@ public:
 	int NoIncorrectSymbols(bool);
 	int EqualBrackets();
 	int SignsCorrect();
+	int PointsCorrect(bool);
 	int ArgumentsExist();
 	int CorrectZeros();
 

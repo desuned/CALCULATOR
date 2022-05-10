@@ -1,19 +1,19 @@
-#ifndef FUNCTIONEVALUATOR_H
-#define FUNCTIONEVALUATOR_H
+#ifndef CALCULATOR_H
+#define CALCULATOR_H
 #include "../refs/refs.h" 
-class FunctionEvaluator {
+class Calculator {
 public:
 	string equation;
 	sPtr eqPtr;
-	FunctionEvaluator(sPtr);
+	Calculator(sPtr);
 
 	string GetSimpleFunc(); 
 	string GetArgument(string); 
 
-	int ArgumentsCorrect(char, double);
+	int ArgumentCorrect(char, double);
 	int CalcFunc(sLink, double*);
 	void ReplaceFuncValue(sLink, double);
 
-	int CalcAllFunctions();
+	int Calculate();
 }; 
 #endif

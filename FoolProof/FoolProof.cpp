@@ -9,7 +9,7 @@ void FoolProof::GlobalReplace() {
 	Replace(this->equation, "[ ]{1,}", "");
 	Replace(this->equation, "[)][(]", ")*(");
 	Replace(this->equation, ":", "/");
-
+	Replace(this->equation, ",", ".");
 
 	Replace(this->equation, "sin", "s");
 	Replace(this->equation, "cos", "c");
@@ -42,12 +42,28 @@ void FoolProof::GlobalReplace() {
 }
 int FoolProof::NoIncorrectSymbols(bool needRemove) {
 	string pattern = "[^0-9-+/*^()sctnbrep.]";
-	if (needRemove) Replace(this->equation, pattern, "");
+	if (needRemove) {
+		Replace(this->equation, pattern, "");
+		return 1;
+	}
 	if (RegexFind(this->equation, pattern)) {
 		smatch sm;
 		regex rgxx(pattern);
 		regex_search(this->equation, sm, rgxx);
-		cout << "\n  error (fp1): equation has incorrect symbol -- " << sm.str() << ".";
+		cout << "\n  error(fp1): equation has incorrect symbol -- " << sm.str() << ".";
+		return 0;
+	}
+	return 1;
+}
+int FoolProof::PointsCorrect(bool needToRemove) {
+	string pattern;
+	pattern = "[.]{2,}";
+	if (RegexFind(this->equation, pattern)) {
+		if (needToRemove) {
+			Replace(this->equation, "[.]{2,}", ".");
+			return 1;
+		}
+		cout << "\n  error(fp6.1): there's two or more following points sings";
 		return 0;
 	}
 	return 1;
@@ -59,7 +75,7 @@ int FoolProof::EqualBrackets() {
 		if (this->equation[i] == ')') cnt--;
 	}
 	if (cnt != 0) {
-		cout << "\n  error (fp2): equation has bracket inequality, "; 
+		cout << "\n  error(fp2): equation has bracket inequality, "; 
 		cout << "there's " << abs(cnt);
 		if (cnt > 0) cout << " ) less"; 
 		else cout << " ( less";
@@ -69,34 +85,30 @@ int FoolProof::EqualBrackets() {
 	return 1;
 }
 int FoolProof::SignsCorrect() { 
-	string pattern; 
-	// (x+)*y
+	string pattern;  
 	pattern = "[-+/*^]\\)"; 
 	if (RegexFind(this->equation, pattern)) {
-		cout << "\n  error (fp3.1): there's operation sign right before closing bracket.";
+		cout << "\n  error(fp3.1): there's operation sign right before closing bracket.";
 		return 0;
-	}
-	// (+x)-y
+	} 
 	pattern = "\\([+/*^]";
 	if (RegexFind(this->equation, pattern)) {
-		cout << "\n  error (fp3.2): there's operation sign right after opening bracket.";
+		cout << "\n  error(fp3.2): there's operation sign right after opening bracket.";
 		return 0;
-	}
-	// following signs
+	} 
 	pattern = "[-+/*^]{2,}";
 	if (RegexFind(this->equation, pattern)) {
-		cout << "\n  error (fp3.3): there's two or more following operation sings.";
+		cout << "\n  error(fp3.3): there's two or more following operation sings.";
 		return 0;
-	}
-	// 
+	} 
 	pattern = "^[+/*^]+";
 	if (RegexFind(this->equation, pattern)) {
-		cout << "\n  error (fp3.4): there's operation sign in the start of equation";
+		cout << "\n  error(fp3.4): there's operation sign in the start of equation";
 		return 0;
 	}
 	pattern = "[+/*^]+$";
 	if (RegexFind(this->equation, pattern)) {
-		cout << "\n  error (fp3.5): there's operation sign in the end of equation";
+		cout << "\n  error(fp3.5): there's operation sign in the end of equation";
 		return 0;
 	}
 	return 1;
@@ -115,7 +127,7 @@ int FoolProof::ArgumentsExist() {
 		if (func[0] == 'n') func = "ln";
 		if (func[0] == 'b') func = "lb";
 		if (func[0] == 'r') func = "root";
-		cout << "\n  error (fp4): function " << func << " has no argument.";
+		cout << "\n  error(fp4): function " << func << " has no argument.";
 		return 0;
 	}
 	return 1;
@@ -123,23 +135,24 @@ int FoolProof::ArgumentsExist() {
 int FoolProof::CorrectZeros() {
 	this->equation = *(this->eqPtr);
 	if (RegexFind(this->equation, "[/*-+^]0[0-9]{1,}")) {
-		cout << "\n  error (fp5.1): number can't be more than 2 symbols"
+		cout << "\n  error(fp5.1): number can't be more than 2 symbols"
 			<< "starting with a 0 without '.'.";
 		return 0;
 	};
-	if (RegexFind(this->equation, "/0[^/*-+^.]")) { 
-		cout << "\n  error (fp5.2): division by zero.";
+	if (RegexFind(this->equation, "/0[^.]{1}|/0$")) { 
+		cout << "\n  error(fp5.2): division by zero.";
 		return 0;
-	};
-	if (RegexFind(this->equation, "/0\\.[0]{1,}[/*-+^]")) {
-		cout << "\n  error (fp5.2): division by zero.";
+	}; 
+	if (RegexFind(this->equation, "/0\\.[0]{1,}[/*-+^]|/0\\.[0]{1,}$")) {
+		cout << "\n  error(fp5.2): division by zero.";
 		return 0;
 	}; 
 	return 1;
 }
 int FoolProof::AllCorrect() {
 	this->GlobalReplace(); 
-	if (!(this->NoIncorrectSymbols(0))) return 0;
+	if (!(this->NoIncorrectSymbols(1))) return 0;
+	if (!(this->PointsCorrect(1))) return 0;
 	if (!(this->EqualBrackets())) return 0;
 	if (!(this->SignsCorrect())) return 0;
 	if (!(this->ArgumentsExist())) return 0;
