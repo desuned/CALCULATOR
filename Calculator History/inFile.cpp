@@ -98,6 +98,3 @@ void clearHistory() { //полная очистка истории
 	ofstream calcFile("Calculator History.txt", ios_base::trunc);
 	hCounter = 0;
 }
-
-
-
