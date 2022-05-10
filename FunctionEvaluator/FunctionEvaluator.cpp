@@ -14,7 +14,7 @@ string FunctionEvaluator::GetSimpleFunc() {
 	smatch sm;
 	// if there's cstnbr then there's ( so I just check ( instead of cst..
 	regex_search(this->equation, sm,
-		regex{ ".{1}[(][^()]{1,}[)]" });
+		regex{ "[^(]{0,1}[(][^()]{1,}[)]" });
 	if (sm.empty()) return "";
 	string simpleFunc = sm.str();
 	// hard fix of [^sctnbr]{1,}[)] 
@@ -29,9 +29,9 @@ string FunctionEvaluator::GetSimpleFunc() {
 	}
 	return simpleFunc;
 }
-string FunctionEvaluator::GetArgument(string equation) {
-	Replace(equation, ".{1}[(]{1}|[)]{1}$", "");
-	Replace(equation, "^-", "0-");
+string FunctionEvaluator::GetArgument(string equation) { 
+	Replace(equation, "^.{0,1}[(]+|[)]+$", "");
+	Replace(equation, "^-", "0-"); 
 	vector<string> nums = Split(equation, "[^.0-9]+");
 	vector<string> signs = Split(equation, "[.0-9]+");
 	if (signs[0] == "") signs.erase(signs.begin() + 0);
@@ -43,9 +43,7 @@ string FunctionEvaluator::GetArgument(string equation) {
 	cout << "\n  Signs:";
 	for each (string sign in signs)
 		cout << "\n    " << sign;
-	cout << "\n  Steps:";
-	// cout << "\n  ";  system("pause");
-	// return 0; 
+	cout << "\n  Steps:"; 
 
 	char const_signs[] = { '^', '*', '/', '-', '+' };
 	int cnt = 0;
@@ -117,18 +115,15 @@ int FunctionEvaluator::CalcFunc(sLink simpleFunc, double* arg) {
 }
 void FunctionEvaluator::ReplaceFuncValue(sLink simpleFunc, double value) {
 	string replacer = "";
-	if (!RegexFind(simpleFunc, "[sctnbr]{1,}")) replacer += simpleFunc[0];
-	replacer += to_string(value);
-	// cout << "\n  simpleFuncBefore: " << simpleFunc;
+	if (!RegexFind(simpleFunc, "^[sctnbr(]")) replacer += simpleFunc[0];
+	replacer += to_string(value); 
 	Replace(simpleFunc, "\\\\", "\\\\");
 	Replace(simpleFunc, "\\(", "\\(");
 	Replace(simpleFunc, "\\)", "\\)");
 	Replace(simpleFunc, "\\*", "\\*");
 	Replace(simpleFunc, "\\+", "\\+");
 	Replace(simpleFunc, "\\-", "\\-");
-	Replace(simpleFunc, "\\^", "\\^");
-	// cout << "\n  simpleFuncAfter: " << simpleFunc;
-	// cout << "\n  replacer: " << replacer;
+	Replace(simpleFunc, "\\^", "\\^"); 
 	Replace(this->equation, simpleFunc, replacer);
 	// for outer equation variable
 	*(this->eqPtr) = this->equation;
@@ -136,9 +131,10 @@ void FunctionEvaluator::ReplaceFuncValue(sLink simpleFunc, double value) {
 
 int FunctionEvaluator::CalcAllFunctions() {
 	this->equation = *(this->eqPtr);
+
 	while (1) {
-		double funcValue;
-		string simpleFunc = this->GetSimpleFunc(); 
+		double funcValue; 
+		string simpleFunc = this->GetSimpleFunc();  
 		if (simpleFunc == "") break;
 		if (!this->CalcFunc(simpleFunc, &funcValue)) return 0;
 		cout << "\n  Previous equation: " << this->equation;
