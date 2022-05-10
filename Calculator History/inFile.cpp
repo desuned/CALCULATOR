@@ -34,16 +34,14 @@ string getLast() { // вывод на экран последнего действия
 	else {
 		string tmpLine, lastLine;
 		
-		while (calcFile) {
-			
+		while (calcFile) {	
 			getline(calcFile, tmpLine);
 			
 			if (tmpLine[0] - 'a' + '1' == hCounter) {
 				Replace(tmpLine, "[0-9.]+$|^[0-9]+[.]{1}[ ]{1}", "");
 				lastLine = tmpLine;
 				break;
-			}
-			
+			}	
 		}
 		
 		return lastLine;
@@ -58,17 +56,15 @@ string getInit(int needed) { //  функция, находящая нужное выражение по номеру в
 	else {
 		string tmpLine, neededLine;
 		
-		while (calcFile) {
-			
+		while (calcFile) {	
 			getline(calcFile, tmpLine);
 			
 			if (tmpLine[0] - 'a' + '1' == needed) {
 				Replace(tmpLine, "[0-9.]+$|^[0-9]+[.]{1}[ ]{1}", "");
 				neededLine = tmpLine;
 				break;
-			}
-			
-		}
+			}		
+		}	
 		
 		return neededLine;
 	}
