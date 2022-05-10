@@ -17,9 +17,9 @@ int FunctionEvaluator::ArgumentsCorrect(char equation, double arg) {
 void FunctionEvaluator::SetFuncValue(sLink simpleFunc, double value) {
 	string replacer = "";
 	if (!RegexFind(simpleFunc, "[sctnbr]{1,}")) replacer += simpleFunc[0];
-	replacer += to_string((int)value);
-	cout << "\n eee: " << value;
-	
+	replacer += to_string(value); 
+	cout << "\n  value: " << value;
+	cout << "\n  simpleFuncBefore: " << simpleFunc;
 	Replace(simpleFunc, "\\\\", "\\\\");
 	Replace(simpleFunc, "\\(", "\\(");
 	Replace(simpleFunc, "\\)", "\\)");
@@ -27,15 +27,17 @@ void FunctionEvaluator::SetFuncValue(sLink simpleFunc, double value) {
 	Replace(simpleFunc, "\\+", "\\+");
 	Replace(simpleFunc, "\\-", "\\-");
 	Replace(simpleFunc, "\\^", "\\^");
-	
+	cout << "\n  simpleFuncAfter: " << simpleFunc;
+	cout << "\n  replacer: " << replacer;
 	Replace(this->equation, simpleFunc, replacer);
 	// for outer equation variable
 	*(this->eqPtr) = this->equation;
 }
 string FunctionEvaluator::GetSimpleFunc() {
 	smatch sm; 
+	// if there's cstnbr then there's ( so I just check ( instead of cst..
 	regex_search(this->equation, sm,
-		regex{ ".{1}[(][^sctnbr()]{1,}[)]" });
+		regex{ ".{1}[(][^()]{1,}[)]" });
 	if (sm.empty()) return "";
 	string simpleFunc = sm.str();
 	// hard fix of [^sctnbr]{1,}[)] 
@@ -51,15 +53,14 @@ string FunctionEvaluator::GetSimpleFunc() {
 	return simpleFunc;
 }
 double FunctionEvaluator::CalcArg(string func) {
-	Replace(func, ".{1}[(]{1}|[)]{1}$", "");  
-	func = infixToPrefix(func); 
-	return evaluatePrefix(func);
+	Replace(func, ".{1}[(]{1}|[)]{1}$", "");
+	return stod(GetSimpleValue(func));
 }
 int FunctionEvaluator::CalcFunc(sLink simpleFunc, double* arg) {
 	double funcArg = CalcArg(simpleFunc); 
+	cout << "\n  funcArg: " << funcArg;
 	double result; char func = simpleFunc[0];
-	if (!ArgumentsCorrect(func, funcArg)) return 0;
-	cout << "\n\t  " << funcArg;
+	if (!ArgumentsCorrect(func, funcArg)) return 0; 
 	if		(func == 's') result = sin(funcArg * deg);
 	else if (func == 'c') result = cos(funcArg * deg);
 	else if (func == 't') result = tan(funcArg * deg);
@@ -67,7 +68,7 @@ int FunctionEvaluator::CalcFunc(sLink simpleFunc, double* arg) {
 	else if (func == 'b') result = log2(funcArg);
 	else if (func == 'r') result = sqrt(funcArg);
 	else result = funcArg;
-
+	cout << "\n  result: " << result;
 	*arg = result;
 	return 1;
 }
@@ -75,8 +76,7 @@ int FunctionEvaluator::CalcAllFunctions() {
 	this->equation = *(this->eqPtr);
 	while (1) {
 		double funcValue;
-		string simpleFunc = this->GetSimpleFunc();
-		cout << "\n  " << simpleFunc << ", \t" << this->equation;
+		string simpleFunc = this->GetSimpleFunc(); 
 		if (simpleFunc == "") break;
 		if (!this->CalcFunc(simpleFunc, &funcValue)) return 0;
 		this->SetFuncValue(simpleFunc, funcValue);
