@@ -148,6 +148,8 @@ void Calculator::ReplaceFuncValue(sLink simpleFunc, double value) {
 
 int Calculator::Calculate() {
 	this->equation = *(this->eqPtr); 
+	cout << "\n oi:" << this->equation;
+	cout << "\n b: " << *(this->eqPtr);
 	while (1) {
 		double funcValue; 
 		string simpleFunc = this->GetSimpleFunc();  
@@ -161,3 +163,7 @@ int Calculator::Calculate() {
 	*(this->eqPtr) = GetArgument(this->equation); 
 	return !(*(this->eqPtr) == "");
 }
+
+
+
+

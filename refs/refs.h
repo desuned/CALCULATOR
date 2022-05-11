@@ -41,6 +41,9 @@ vector<string> Split(string str, string pattern) {
 	return strArr;
 }
 
+int Quit() {
+	printf("\n\n  "); system("pause"); return 0;
+}
 
 
 /*

@@ -6,7 +6,8 @@ public:
 	string equation;
 	sPtr eqPtr;
 	FoolProof(sPtr);
-	void GlobalReplace();
+	int GlobalReplace();
+	int IsntEmpty();
 	int NoIncorrectSymbols(bool);
 	int EqualBrackets();
 	int SignsCorrect();
