@@ -5,7 +5,7 @@ FoolProof::FoolProof(sPtr eqPtr) {
 }
 void FoolProof::GlobalReplace() {
 	while (RegexFind(this->equation, "[(][)]"))
-		Replace(this->equation, "[(][)]", "");
+		Replace(this->equation, "[(]{1}[)]{1}", "");
 	Replace(this->equation, "[ ]{1,}", "");
 	Replace(this->equation, "[)][(]", ")*(");
 	Replace(this->equation, ":", "/");
@@ -150,7 +150,11 @@ int FoolProof::CorrectZeros() {
 	return 1;
 }
 int FoolProof::AllCorrect() {
-	this->GlobalReplace(); 
+	this->GlobalReplace();
+	if (this->equation == "") {
+		cout << "error(fp0): string's empty";
+		return 0;
+	}
 	if (!(this->NoIncorrectSymbols(1))) return 0;
 	if (!(this->PointsCorrect(1))) return 0;
 	if (!(this->EqualBrackets())) return 0;
