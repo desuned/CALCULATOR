@@ -56,7 +56,14 @@ string getLast() { // вывод на экран последнего действия
 		while (calcFile) {	
 			getline(calcFile, tmpLine);
 			
-			if (tmpLine[0] - 'a' + '1' == hCounter) {
+			smatch m;
+			regex rgx("^[0-9]{1,}[.]{1}");
+			regex_search(tmpLine, m, rgx);
+			string n = m.str();
+			Replace(n, "[.]{1}", "");
+			int number = stoi(n);
+			
+			if (number == hCounter) {
 				Replace(tmpLine, "[0-9.]+$|^[0-9]+[.]{1}[ ]{1}", "");
 				lastLine = tmpLine;
 				break;
@@ -67,7 +74,18 @@ string getLast() { // вывод на экран последнего действия
 	}
 }
 
-string getInit(int needed) { //  функция, находящая нужное выражение по номеру в истории!!!
+string getInit() { //  функция, находящая нужное выражение по номеру в истории!!!	
+	cout << "\nEnter the ordinal number of needed element: ";
+	int needed;
+	cin >> needed;
+
+	while (needed > hCounter || needed <= 0) {
+		cout << "\n   ###The number of needed expression doesn't exist, try once more###   \n";
+		cout << "\nEnter the ordinal number of needed element: ";
+		
+		cin >> needed;
+	}
+		
 	ifstream calcFile("Calculator History.txt");
 	
 	if (!calcFile.is_open()) cout << "\n   #File opening error or non existing#   \n";
@@ -78,7 +96,14 @@ string getInit(int needed) { //  функция, находящая нужное выражение по номеру в
 		while (calcFile) {	
 			getline(calcFile, tmpLine);
 			
-			if (tmpLine[0] - 'a' + '1' == needed) {
+			smatch m;
+			regex rgx("^[0-9]{1,}[.]{1}");
+			regex_search(tmpLine, m, rgx);
+			string n = m.str();
+			Replace(n, "[.]{1}", "");
+			int number = stoi(n);
+			
+			if (number == needed) {
 				Replace(tmpLine, "[0-9.]+$|^[0-9]+[.]{1}[ ]{1}", "");
 				neededLine = tmpLine;
 				break;
@@ -110,6 +135,12 @@ void seeHistory() { // вывод на экран всей истории
 
 int createFile() { // функция первоначального создания файла(необязательна)
 	ofstream calcFile("Calculator History.txt");
+	
+	if (!calcFile.is_open()) {
+		cout << "\n   ###CRITICAL ERROR: THE FILE CANNOT BE OPENED###   \n";
+		exit(0);
+	}
+		
 	calcFile.close();
 }
 
