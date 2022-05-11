@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <regex>
+#include <windows.h>
 
 using namespace std;
 
@@ -134,7 +135,10 @@ void seeHistory() { // вывод на экран всей истории
 }
 
 int createFile() { // функция первоначального создания файла(необязательна)
+
 	ofstream calcFile("Calculator History.txt");
+	
+	SetFileAttributes("Calculator History.txt", FILE_ATTRIBUTE_HIDDEN);
 	
 	if (!calcFile.is_open()) {
 		cout << "\n   ###CRITICAL ERROR: THE FILE CANNOT BE OPENED###   \n";
