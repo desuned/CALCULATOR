@@ -2,10 +2,9 @@
 // Created by danya on 13.05.2022.
 //
 
-#include "calc_tree.h"
-#include "refs/refs.h"
+#include "Calculator.h"
 
-int CalcTree::ArgumentCorrect(char equation, double arg) {
+int Calculator::ArgumentCorrect(char equation, double arg) {
 
     int error = 0;
 
@@ -35,7 +34,7 @@ int CalcTree::ArgumentCorrect(char equation, double arg) {
 
 }
 
-int CalcTree::GetPriority(string item) {
+int Calculator::GetPriority(string item) {
 
     if (RegexFind(item, "[sctnbr]")) return 4;
     if (item == "^") return 3;
@@ -45,7 +44,7 @@ int CalcTree::GetPriority(string item) {
 
 }
 
-vector<string> CalcTree::InfixToPostfix(sLink equation) {
+vector<string> Calculator::InfixToPostfix(sLink equation) {
 
     vector<string> infix = SaveSplit(equation, "[+-*/^()]{1}");
     stack<string> st;
@@ -99,7 +98,7 @@ vector<string> CalcTree::InfixToPostfix(sLink equation) {
 
 }
 
-double CalcTree::CalculatePostfix(sLink equation, double* result) {
+double Calculator::Calculate(sLink equation, double* result) {
 
     vector<string> postfix = this->InfixToPostfix(equation);
     stack<double> Stack;
