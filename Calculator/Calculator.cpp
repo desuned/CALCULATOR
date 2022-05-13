@@ -4,11 +4,6 @@ int ArrayFind(vector<string>* arr, char elem) {
 		if (((*arr)[i])[0] == elem) return i;
 	return -1;
 }
-// constructor 
-Calculator::Calculator(sPtr eqPtr) {
-	this->equation = *eqPtr;
-	this->eqPtr = eqPtr;
-}
 
 string Calculator::GetSimpleFunc() {
 	smatch sm;
@@ -36,7 +31,7 @@ string Calculator::GetArgument(string equation) {
 	vector<string> signs = Split(equation, "[.0-9]+");
 	if (signs[0] == "") signs.erase(signs.begin() + 0);
 	double res = 0;
-
+	/*
 	cout << "\n  Nums:";
 	for each (string num in nums)
 		cout << "\n    " << num;
@@ -44,7 +39,7 @@ string Calculator::GetArgument(string equation) {
 	for each (string sign in signs)
 		cout << "\n    " << sign;
 	cout << "\n  Steps:"; 
-
+	*/
 	char const_signs[] = { '^', '*', '/', '-', '+' };
 	int cnt = 0;
 	while (signs.size() != 0) {
@@ -53,10 +48,8 @@ string Calculator::GetArgument(string equation) {
 		int i = ArrayFind(&signs, loopSign);
 		while (i >= 0) {
 			double left = stod(nums[i]);
-			double right = stod(nums[i + 1]);
-			cout << "\n\t" << left
-				<< " " << signs[i]
-				<< " " << right << " = ";
+			double right = stod(nums[i + 1]); 
+			// printf("\n\t %lf %s %lf = ", left, signs[i].c_str(), right);
 			if (signs[i] == "/" && right == 0) return ""; 
 			// *-, /-, --, +-, ^- cases
 			if (signs[i].size() == 2) right *= -1;
@@ -70,14 +63,14 @@ string Calculator::GetArgument(string equation) {
 				nums[i] = to_string(left - right);
 			else if (loopSign == '+')
 				nums[i] = to_string(left + right);
-			cout << nums[i] << " ;";
+			// cout << nums[i] << " ;";
 			signs.erase(signs.begin() + i);
 			nums.erase(nums.begin() + i + 1);
 			i = ArrayFind(&signs, loopSign);
 		}
 		cnt++;
 	}
-	cout << "\n  --------------------";
+	// cout << "\n  --------------------";
 	return nums[0];
 }
 
@@ -108,14 +101,14 @@ int Calculator::ArgumentCorrect(char equation, double arg) {
 	return 1;
 }
 int Calculator::CalcFunc(sLink simpleFunc, double* arg) {
-	cout << "\n\n\n  simpleFunc: " << simpleFunc;
+	// cout << "\n\n\n  simpleFunc: " << simpleFunc;
 	string funcArgStr = this->GetArgument(simpleFunc);
 	if (funcArgStr == "") {
 		cout << "\n  error(c0): division by zero.";
 		return 0;
 	}
 	double funcArg = stod(funcArgStr);
-	cout << "\n  funcArg: " << funcArg;
+	// cout << "\n  funcArg: " << funcArg;
 	double result; char func = simpleFunc[0];
 	if (!this->ArgumentCorrect(func, funcArg)) return 0;
 	
@@ -126,7 +119,7 @@ int Calculator::CalcFunc(sLink simpleFunc, double* arg) {
 	else if (func == 'b') result = log2(funcArg);
 	else if (func == 'r') result = sqrt(funcArg);
 	else result = funcArg;
-	cout << " -> value: " << result;
+	// cout << " -> value: " << result;
 	*arg = result;
 	return 1;
 }
@@ -141,29 +134,21 @@ void Calculator::ReplaceFuncValue(sLink simpleFunc, double value) {
 	Replace(simpleFunc, "\\+", "\\+");
 	Replace(simpleFunc, "\\-", "\\-");
 	Replace(simpleFunc, "\\^", "\\^"); 
-	Replace(this->equation, simpleFunc, replacer);
-	// for outer equation variable
-	*(this->eqPtr) = this->equation;
+	Replace(this->equation, simpleFunc, replacer); 
 }
 
-int Calculator::Calculate() {
-	this->equation = *(this->eqPtr); 
-	cout << "\n oi:" << this->equation;
-	cout << "\n b: " << *(this->eqPtr);
+int Calculator::Calculate(sPtr eqPtr) {
+	this->equation = *eqPtr;
 	while (1) {
 		double funcValue; 
 		string simpleFunc = this->GetSimpleFunc();  
 		if (simpleFunc == "") break;
 		if (!this->CalcFunc(simpleFunc, &funcValue)) return 0;
-		cout << "\n  Previous equation: " << this->equation;
+		// cout << "\n  Previous equation: " << this->equation;
 		this->ReplaceFuncValue(simpleFunc, funcValue);
-		cout << "\n  Current equation: " << this->equation;
+		// cout << "\n  Current equation: " << this->equation;
 	}
-	cout << "\n\n";
-	*(this->eqPtr) = GetArgument(this->equation); 
-	return !(*(this->eqPtr) == "");
+	// cout << "\n\n";
+	*eqPtr = GetArgument(this->equation); 
+	return !(*eqPtr == "");
 }
-
-
-
-

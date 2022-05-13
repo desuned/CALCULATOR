@@ -3,9 +3,7 @@
 #include "../refs/refs.h" 
 class Calculator {
 public:
-	string equation;
-	sPtr eqPtr;
-	Calculator(sPtr);
+	string equation; 
 
 	string GetSimpleFunc(); 
 	string GetArgument(string); 
@@ -14,6 +12,6 @@ public:
 	int CalcFunc(sLink, double*);
 	void ReplaceFuncValue(sLink, double);
 
-	int Calculate();
+	int Calculate(sPtr);
 }; 
 #endif

@@ -1,13 +1,10 @@
 #include "FoolProof.h"
-FoolProof::FoolProof(sPtr eqPtr) {
-	this->equation = *eqPtr; 
-	this->eqPtr = eqPtr;
-}
 int FoolProof::GlobalReplace() {
 	while (RegexFind(this->equation, "[(][)]"))
 		Replace(this->equation, "[(]{1}[)]{1}", "");
 	Replace(this->equation, "[ ]{1,}", "");
 	Replace(this->equation, "[)][(]", ")*(");
+	Replace(this->equation, "[*]{2,}", "^");
 	Replace(this->equation, ":", "/");
 	Replace(this->equation, ",", ".");
 
@@ -16,10 +13,13 @@ int FoolProof::GlobalReplace() {
 	Replace(this->equation, "tg", "t");
 	Replace(this->equation, "ln", "n");
 	Replace(this->equation, "lb", "b");
-	Replace(this->equation, "root", "r");
+	Replace(this->equation, "root|sqrt", "r");
 
 	Replace(this->equation, "pi", "3.141592653");
 	Replace(this->equation, "e", "2.7182818284");
+
+	Replace(this->equation, "^-", "0-");
+	Replace(this->equation, "[(]-", "(0-");
 
 	// 5(1+1) -> 5*(1+1);
 	smatch sm;
@@ -36,8 +36,7 @@ int FoolProof::GlobalReplace() {
 			regex_search(this->equation, sm, pattern);
 		}
 		else break;
-	}  
-
+	}
 	return 1;
 }
 int FoolProof::IsntEmpty() {
@@ -125,7 +124,9 @@ int FoolProof::CorrectZeros() {
 		error = printf("\n  error(fp5.2): division by zero."); 
 	return (error == 0);
 }
-int FoolProof::AllCorrect() {
+int FoolProof::AllCorrect(sPtr eqPtr) {
+	this->equation = *eqPtr;
+	this->eqPtr = eqPtr;
 	this->GlobalReplace();
 	if (!(this->IsntEmpty())) return 0;
 	if (!(this->NoIncorrectSymbols(1))) return 0; 

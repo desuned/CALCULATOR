@@ -4,9 +4,10 @@
 class FoolProof {
 public:
 	string equation;
-	sPtr eqPtr;
-	FoolProof(sPtr);
+	sPtr eqPtr; 
+
 	int GlobalReplace();
+
 	int IsntEmpty();
 	int NoIncorrectSymbols(bool);
 	int EqualBrackets();
@@ -15,6 +16,6 @@ public:
 	int ArgumentsExist();
 	int CorrectZeros();
 
-	int AllCorrect();
+	int AllCorrect(sPtr);
 }; 
 #endif

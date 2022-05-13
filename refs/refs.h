@@ -22,16 +22,25 @@ void Replace(sLink s, string pattern, string replacer) {
 	s = regex_replace(s, regex{ pattern }, replacer);
 }
 vector<string> SaveSplit(string str, string pattern) {
-	smatch m;
+	smatch m; 
+	Replace(pattern, "\\\\", "\\\\"); 
+	Replace(pattern, "\\*", "\\*");
+	Replace(pattern, "\\+", "\\+");
+	Replace(pattern, "\\-", "\\-");
+	Replace(pattern, "\\^", "\\^"); 
+	Replace(pattern, "\\(", "\\(");
+	Replace(pattern, "\\)", "\\)");
 	regex rgx = regex{ pattern };
 	sregex_token_iterator splitter{ str.begin(), str.end(), rgx, -1 };
-	vector<string> strArr{ splitter, {} };
+	vector<string> strArr{ splitter, {} }; 
 	int vecSize = strArr.size();
-	for (int i = 0; i < vecSize - 1; i++) {
+	for (int i = 0; i < vecSize; i++) {
 		regex_search(str, m, rgx);
 		strArr.insert(strArr.begin() + i * 2 + 1, m.str());
 		str = regex_replace(str, rgx, "", regex_constants::format_first_only);
 	}
+	for (int i = 0; i < strArr.size(); i++)
+		if (strArr[i] == "") strArr.erase(strArr.begin() + i);
 	return strArr;
 }
 vector<string> Split(string str, string pattern) {
@@ -44,17 +53,4 @@ vector<string> Split(string str, string pattern) {
 int Quit() {
 	printf("\n\n  "); system("pause"); return 0;
 }
-
-
-/*
-	string a = "a";
-	double v = 1.123123123123;
-	std::ostringstream str;
-	str << fixed;
-	str << setprecision(14);
-	str << v;
-	std::string str2 = str.str();
-	cout << (a + str2) << "\n";
-*/
-
 #endif

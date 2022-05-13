@@ -1,9 +1,9 @@
 edit: 
 	FoolProof:
-	1. new IsntEmpty()
-	2. Fixed NoIncorrectSymbols(1) by moved line 
-	"*(this->eqPtr) = this->equation" from GlobalReplace()
-	and CorrectZeros in AllCorrect()
-	All: 
-	1. printf instead of cout 
-	
+	1. Removed param constructor
+	2. AllCorrect() has sPtr arg now
+	3. GlobalReplace(): Square root is root and sqrt now 
+	Calculator:
+	1. Removed param constructor and eqPtr;
+	2. Calculate() has sPtr arg now
+	3. All degub couts in comments 
