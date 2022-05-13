@@ -21,7 +21,7 @@ void command_list(){
         <<"(~s)Exit         (~s)\n";
 }
 void info_history_menu(){
-    cout<<"(1)All      (1)\n"
+    cout<<"(1)   All   (1)\n"
         <<"(2)Number_Op(2)\n";
 }
 void menu(){

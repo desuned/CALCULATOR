@@ -1,1 +1,1 @@
-start test.exe
+start menu.exe
