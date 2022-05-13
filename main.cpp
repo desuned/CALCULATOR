@@ -17,9 +17,9 @@ s(t(3.141592653/2.2+0/3*(2^3)))*c(n(7))+n(1)^n(2.7182818284)+20*r(3)*c(120) == 2
 
 int main() {
 
-    string equation = "0-5*(0-3)+5/n(1+1+1+1+1+2*s(0))";
+    string equation = "8+.5+1";
     double result;
-    CalcTree Calculator(&equation);
+    CalcTree Calculator;
 
     if (Calculator.CalculatePostfix(equation, &result)) cout << "\n  " << result;
 

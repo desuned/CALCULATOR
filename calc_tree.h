@@ -10,9 +10,6 @@
 class CalcTree {
 
 public:
-    string equation;
-    sPtr eqPtr;
-    CalcTree(sPtr);
     int ArgumentCorrect(char, double);
     int GetPriority(string);
     vector<string> InfixToPostfix(sLink);

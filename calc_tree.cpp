@@ -5,13 +5,6 @@
 #include "calc_tree.h"
 #include "refs/refs.h"
 
-CalcTree::CalcTree(sPtr eqPtr) {        // Constructor
-
-    this->equation = *eqPtr;
-    this->eqPtr = eqPtr;
-
-}
-
 int CalcTree::ArgumentCorrect(char equation, double arg) {
 
     int error = 0;
@@ -137,7 +130,7 @@ double CalcTree::CalculatePostfix(sLink equation, double* result) {
             Stack.pop();
             double peakLeft = Stack.top();
             Stack.pop();
-            printf("\n  Operation: %lf %s %lf", peakLeft, item.c_str(), peakRight);
+            //printf("\n  Operation: %lf %s %lf", peakLeft, item.c_str(), peakRight);
 
             if (!this->ArgumentCorrect(item[0], peakRight)) return 0;
             if (item == "+") Stack.push(peakLeft + peakRight);

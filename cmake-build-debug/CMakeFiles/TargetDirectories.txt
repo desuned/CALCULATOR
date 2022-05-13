@@ -1,3 +1,0 @@
-C:/Programming/C++/Practice_calculator/CALCULATOR/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-C:/Programming/C++/Practice_calculator/CALCULATOR/cmake-build-debug/CMakeFiles/CALCULATOR.dir
-C:/Programming/C++/Practice_calculator/CALCULATOR/cmake-build-debug/CMakeFiles/edit_cache.dir
