@@ -48,7 +48,7 @@ int FoolProof::IsntEmpty() {
 	return (error == 0);
 }
 int FoolProof::NoIncorrectSymbols(bool needRemove) { 
-	string pattern = "[^0-9-+/*^()sctnbr.]{1,}";
+	string pattern = "[^0-9-+/*^()sctnbr.]{1,}"; 
 	int error = 0;
 	if (needRemove)
 		Replace(this->equation, pattern, "");
@@ -62,7 +62,7 @@ int FoolProof::NoIncorrectSymbols(bool needRemove) {
 	return (error == 0);
 }
 int FoolProof::PointsCorrect(bool needToRemove) {
-	string pattern = "[.]{2,}";
+	string pattern = "[.]{2,}"; 
 	int error = 0;
 	if (needToRemove) 
 		Replace(this->equation, pattern, ".");
