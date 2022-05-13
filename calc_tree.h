@@ -13,6 +13,8 @@ public:
     string equation;
     sPtr eqPtr;
     CalcTree(sPtr);
+    int GetPriority(string);
+    vector<string> InfixToPostfix(sLink);
 
 };
 
