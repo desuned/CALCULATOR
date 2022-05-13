@@ -3,3 +3,11 @@
 //
 
 #include "calc_tree.h"
+#include "refs/refs.h"
+
+CalcTree::CalcTree(sPtr eqPtr) {        // Constructor
+
+    this->equation = *eqPtr;
+    this->eqPtr = eqPtr;
+
+}
