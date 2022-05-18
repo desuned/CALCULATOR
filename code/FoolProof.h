@@ -1,6 +1,6 @@
 #ifndef FOOLPROOF_H
 #define FOOLPROOF_H
-#include "../refs/refs.h"
+#include "refs.h"
 class FoolProof {
 public:
 	string equation;

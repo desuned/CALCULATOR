@@ -1,4 +1,7 @@
-#include "../refs/refs.h"
+#include "refs.h"
+#include "FoolProof.h"
+#include "ctrl_Handler.h"
+#include "Calculator.h"
 void operation_list(){
     cout<<"1)Addition             \n"
         <<"2)Subtraction          \n"
@@ -24,7 +27,7 @@ void info_history_menu(){
     cout<<"(1)   All   (1)\n"
         <<"(2)Number_Op(2)\n";
 }
-void menu(){
+int main(){
     while(true){
         // BOOL ret = SetConsoleCtrlHandler(ConsoleHandlerRoutine, TRUE);
         signal(SIGINT, siginthandler);
@@ -56,4 +59,5 @@ void menu(){
         }
         cin.clear();
     };
+    return 0;
 }

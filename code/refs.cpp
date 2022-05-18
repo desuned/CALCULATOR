@@ -1,25 +1,4 @@
-
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <regex>
-#include <vector>
-#include <stack>
-#include <sstream>
-#include <iomanip>
-#include "../Error_checker/ctrl_Handler.h"
-#include "../Calculator/Calculator.h"
-#include "../FoolProof/FoolProof.h"
-#include <conio.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <cstdlib>
-#include <windows.h>
-using namespace std;
- 
-typedef string& sLink;
-typedef string* sPtr;
+#include"refs.h"
 int RegexFind(string s, string pattern) {
 	smatch m;
 	regex rgxx(pattern);
@@ -52,16 +31,3 @@ vector<string> Split(string str, string pattern) {
 int Quit() {
 	printf("\n\n  "); system("pause"); return 0;
 }
-
-
-/*
-	string a = "a";
-	double v = 1.123123123123;
-	std::ostringstream str;
-	str << fixed;
-	str << setprecision(14);
-	str << v;
-	std::string str2 = str.str();
-	cout << (a + str2) << "\n";
-*/
-

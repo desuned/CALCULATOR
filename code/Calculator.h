@@ -5,7 +5,7 @@
 #ifndef CALCULATOR_CALCULATOR_H
 #define CALCULATOR_CALCULATOR_H
 
-#include "../refs/refs.h"
+#include "refs.h"
 class Calculator {
 
 public:

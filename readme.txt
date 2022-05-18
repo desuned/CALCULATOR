@@ -1,10 +1,8 @@
 Name: temp commit
-0)Merged orlov_branch pisk_branch zaikin_branch
-1)replaced "build.bat run.bat menu.cpp menu.h" into #main# from #Error_checker#
-2)Add #refs# and refs.h into #Calculator#
-3)Add some header in refs.h "FoolProof.h Error_checker.h Calcualtor.h"
-4)Delete menu.h in #main#
-5)renamed "menu.cpp" -> "main.cpp"
+0)Delete ctrl_test.cpp
+1)[*.h *.cpp] -> code
+2)Add refs.cpp 
+3)Project builder run correctly
 Legends:
 	Folder: #FolderName#
 
