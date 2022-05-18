@@ -6,7 +6,6 @@
 #define CALCULATOR_CALCULATOR_H
 
 #include "../refs/refs.h"
-
 class Calculator {
 
 public:

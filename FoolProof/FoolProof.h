@@ -5,9 +5,7 @@ class FoolProof {
 public:
 	string equation;
 	sPtr eqPtr; 
-
 	int GlobalReplace();
-
 	int IsntEmpty();
 	int NoIncorrectSymbols(bool);
 	int EqualBrackets();
@@ -15,7 +13,6 @@ public:
 	int PointsCorrect(bool);
 	int ArgumentsExist();
 	int CorrectZeros();
-
 	int AllCorrect(sPtr);
 }; 
 #endif
