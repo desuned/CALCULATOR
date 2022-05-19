@@ -1,6 +1,7 @@
 Name: temp commit
-0)Delete cin.ignore in main.cpp
-	-Now you can select mode(~p ~e ...)
+0)Replaced some if 
+	-Now if want calculate you can press(Enter)
+		if string length = 2 then you may choose ~p...
 Legends:
 	Folder: #FolderName#
 

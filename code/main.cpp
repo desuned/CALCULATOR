@@ -30,22 +30,19 @@ void info_history_menu(){
 int main(){
     while(true){
         command_list();
-        // BOOL ret = SetConsoleCtrlHandler(ConsoleHandlerRoutine, TRUE);
         signal(SIGINT, siginthandler);
         cout<<"Enter expression\n";
         string s;
         getline(cin,s);
         if(s.length()>2){
-            cout<<1;
-            if(s=="~e"){
                 //code orlov
                 //code zaikin
-            }
-            else if(s=="~p"){
+        }
+        else if(s=="~s"){break;}
+        else if(s=="~p"){
                 info_history_menu();
                 if(getch()=='1'){
-                    //code orlov
-                    //code zaikin
+                    //code zvor
                 }
                 else if(getch()=='2'){
                     //code zvor
@@ -59,7 +56,6 @@ int main(){
                 system("cls");
             }
         }
-        else if(s=="~s"){;break;}
         cin.clear();
     }
     return 0;
