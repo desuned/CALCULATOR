@@ -1,5 +1,6 @@
 #ifndef REFS_H
 #define REFS_H
+
 #include <iostream>
 #include <cmath>
 #include <string>
@@ -8,6 +9,8 @@
 #include <stack>
 #include <sstream>
 #include <iomanip>
+#include <fstream>
+#include <windows.h>
 using namespace std;
 
 typedef string& sLink;
@@ -19,15 +22,4 @@ vector<string> Split(string str, string pattern);
 
 int Quit();
 
-
-/*
-	string a = "a";
-	double v = 1.123123123123;
-	std::ostringstream str;
-	str << fixed;
-	str << setprecision(14);
-	str << v;
-	std::string str2 = str.str();
-	cout << (a + str2) << "\n";
-*/
 #endif

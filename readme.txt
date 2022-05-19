@@ -1,8 +1,9 @@
-Name: temp commit
+Name: Finnaly work
 0)add some features 
-
+1)add file example.txt
+2)Add merge zvor_branch
 Future:
-	You may calculate expression
+	Working with file
 Legends:
 	Folder: #FolderName#
 

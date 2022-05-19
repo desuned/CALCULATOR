@@ -1,5 +1,5 @@
 #include"refs.h"
-#include"refs.h"
+
 int RegexFind(string s, string pattern) {
 
     smatch m;

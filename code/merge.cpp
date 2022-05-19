@@ -1,7 +1,10 @@
-﻿#include "refs.h"
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include "refs.h"
 #include "FoolProof.h"
 #include "ctrl_Handler.h"
 #include "Calculator.h"
+#include"inFile.h"
+
 void operation_list() {
     cout << "1)Addition             \n"
         << "2)Subtraction          \n"
@@ -14,14 +17,14 @@ void operation_list() {
         << "9)tg                   \n"
         << "10)natural logarithm   \n"
         << "11)base 2 logarithm    \n"
-        << "12)processing brackets \n";
+        << "12)processing brackets \n\n";
 }
 void command_list() {
-    cout << "(~e)Calculate    (~e)\n"
-        << "(~p)Print_Result (~p)\n"
-        << "(~i)Info_Programm(~i)\n"
-        << "(~c)Clear_Console(~c)\n"
-        << "(~s)Exit         (~s)\n";
+    cout<< "(~p)Print_Result  (~p)\n"
+        << "(~i)Info_Programm (~i)\n"
+        << "(~c)Clear_Console (~c)\n"
+        << "(~d)Delete_history(~d)\n"
+        << "(~s)Exit          (~s)\n";
 }
 void info_history_menu() {
     cout << "(1)   All   (1)\n"
@@ -29,33 +32,38 @@ void info_history_menu() {
 }
 int main() {
     while (true) {
+        findCounter();
         command_list();
         signal(SIGINT, siginthandler);
         cout << "Enter expression\n";
         string s;
         getline(cin, s);
         if (s.length() > 2) {
-            FoolProof FoolProof; // конструктор
-            // string equation, её вроде надо объявить, потому что s у тебя отвечает за команду, а не за уравнение
+            FoolProof FoolProof;
             if (!FoolProof.AllCorrect(&s)) {
                 printf("\n\n Equation's wrong!");
                 system("pause");
-                // тут выход из функции типо, крути цикл с менюшкой дальше, уравнение неправильное
             }
             else {
                 double result=0;
                 Calculator a;
                 if(a.Calculate(s,&result))cout << "Result: " << result << endl;
+                inFile(s, to_string(result));
             }
         }
         else if (s == "~s") { break; }
         else if (s == "~p") {
             info_history_menu();
-            if (_getch() == '1') {
-                //code zvor
+            char ch= _getch();
+            if (ch == '1') {
+                cout << '\n' + string(80, '#')+'\n';
+                seeHistory();
+                cout <<string(80, '#')+'\n';
             }
-            else if (_getch() == '2') {
-                //code zvor
+            else if (ch == '2') {
+                string x="";
+                getInit(x);
+                cout << x<<endl;
             }
             else cout << "command not found\n";
         }
@@ -65,6 +73,7 @@ int main() {
         else if (s == "~c") {
             system("cls");
         }
+        else if (s == "~d") { clearHistory(); }
         cin.clear();
     }
     return 0;
