@@ -47,15 +47,14 @@ int main(){
                 else if(getch()=='2'){
                     //code zvor
                 }
-                else cout<<"Command not found\n";
-            }
+                    else cout<<"Command not found\n";
+                }
             else if(s=="~i"){
                 operation_list();
             }
             else if(s=="~c"){
                 system("cls");
             }
-        }
         cin.clear();
     }
     return 0;

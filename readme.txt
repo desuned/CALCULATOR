@@ -1,7 +1,9 @@
 Name: temp commit
-0)Replaced some if 
-	-Now if want calculate you can press(Enter)
-		if string length = 2 then you may choose ~p...
+0)delete some '}' 
+
+Future:
+	Code ready to add some features
+	Need to add a zvor_branch
 Legends:
 	Folder: #FolderName#
 
