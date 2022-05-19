@@ -1,8 +1,6 @@
 Name: temp commit
-0)Delete ctrl_test.cpp
-1)[*.h *.cpp] -> code
-2)Add refs.cpp 
-3)Project builder run correctly
+0)Delete cin.ignore in main.cpp
+	-Now you can select mode(~p ~e ...)
 Legends:
 	Folder: #FolderName#
 
