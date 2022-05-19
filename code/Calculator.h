@@ -6,13 +6,14 @@
 #define CALCULATOR_CALCULATOR_H
 
 #include "refs.h"
+
 class Calculator {
 
 public:
     int ArgumentCorrect(char, double);
     int GetPriority(string);
     vector<string> InfixToPostfix(sLink);
-    double Calculate(sLink &equation, double *result);
+    double Calculate(sLink equation, double* result);
 
 };
 

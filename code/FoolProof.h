@@ -4,7 +4,7 @@
 class FoolProof {
 public:
 	string equation;
-	sPtr eqPtr; 
+	sPtr eqPtr;
 	int GlobalReplace();
 	int IsntEmpty();
 	int NoIncorrectSymbols(bool);
@@ -14,5 +14,5 @@ public:
 	int ArgumentsExist();
 	int CorrectZeros();
 	int AllCorrect(sPtr);
-}; 
+};
 #endif

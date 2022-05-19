@@ -1,4 +1,4 @@
-#include "refs.h"
+п»ї#include "refs.h"
 #include "FoolProof.h"
 #include "ctrl_Handler.h"
 #include "Calculator.h"
@@ -35,12 +35,12 @@ int main() {
         string s;
         getline(cin, s);
         if (s.length() > 2) {
-            FoolProof FoolProof; // конструктор
-            // string equation, её вроде надо объявить, потому что s у тебя отвечает за команду, а не за уравнение
+            FoolProof FoolProof; // РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+            // string equation, РµС‘ РІСЂРѕРґРµ РЅР°РґРѕ РѕР±СЉСЏРІРёС‚СЊ, РїРѕС‚РѕРјСѓ С‡С‚Рѕ s Сѓ С‚РµР±СЏ РѕС‚РІРµС‡Р°РµС‚ Р·Р° РєРѕРјР°РЅРґСѓ, Р° РЅРµ Р·Р° СѓСЂР°РІРЅРµРЅРёРµ
             if (!FoolProof.AllCorrect(&s)) {
                 printf("\n\n Equation's wrong!");
                 system("pause");
-                // тут выход из функции типо, крути цикл с менюшкой дальше, уравнение неправильное
+                // С‚СѓС‚ РІС‹С…РѕРґ РёР· С„СѓРЅРєС†РёРё С‚РёРїРѕ, РєСЂСѓС‚Рё С†РёРєР» СЃ РјРµРЅСЋС€РєРѕР№ РґР°Р»СЊС€Рµ, СѓСЂР°РІРЅРµРЅРёРµ РЅРµРїСЂР°РІРёР»СЊРЅРѕРµ
             }
             else {
                 double result=0;

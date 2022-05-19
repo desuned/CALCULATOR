@@ -1,9 +1,8 @@
 Name: temp commit
-0)delete some '}' 
+0)add some features 
 
 Future:
-	Code ready to add some features
-	Need to add a zvor_branch
+	You may calculate expression
 Legends:
 	Folder: #FolderName#
 

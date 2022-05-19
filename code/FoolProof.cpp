@@ -116,7 +116,7 @@ int FoolProof::ArgumentsExist() {
 }
 int FoolProof::CorrectZeros() {
 	int error = 0;
-	if (RegexFind(this->equation, "[/*-+^]0[0-9]{1,}"))
+	if (RegexFind(this->equation, "[/*-+^]0[0-9]{1,}|^[0][0-9]{1,}"))
 		error = printf("\n  error(fp5.1): number can't has 2 digits before '.' starting with a zero.");
 	else if (RegexFind(this->equation, "/0[^.]{1}|/0$"))
 		error = printf("\n  error(fp5.2): division by zero."); 

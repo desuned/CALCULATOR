@@ -1,4 +1,5 @@
-
+#ifndef REFS_H
+#define REFS_H
 #include <iostream>
 #include <cmath>
 #include <string>
@@ -7,14 +8,8 @@
 #include <stack>
 #include <sstream>
 #include <iomanip>
-#include <conio.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <cstdlib>
-#include <windows.h>
 using namespace std;
- 
+
 typedef string& sLink;
 typedef string* sPtr;
 int RegexFind(string s, string pattern);
@@ -35,3 +30,4 @@ int Quit();
 	std::string str2 = str.str();
 	cout << (a + str2) << "\n";
 */
+#endif
