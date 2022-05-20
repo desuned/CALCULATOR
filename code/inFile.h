@@ -20,7 +20,6 @@ int getNeeded();
 int getInit(string& neededLine);
 
 void seeHistory();
-
 void clearHistory();
 
 #endif

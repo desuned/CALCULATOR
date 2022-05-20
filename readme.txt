@@ -1,7 +1,5 @@
 Name: Finnaly work
-0)add some features 
-1)add file example.txt
-2)Add merge zvor_branch
+0)Fix file error
 Future:
 	Working with file
 Legends:

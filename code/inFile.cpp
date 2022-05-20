@@ -126,5 +126,6 @@ void seeHistory() { // вывод на экран всей истории
 void clearHistory() { //полная очистка истории
 	ofstream calcFile("Calculator History.txt", ios_base::trunc);
 	SetFileAttributes(L"Calculator History.txt", FILE_ATTRIBUTE_HIDDEN);
+	remove("Calculator History.txt");
 	hCounter = 0;
 }

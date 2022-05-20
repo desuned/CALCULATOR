@@ -12,14 +12,12 @@
 #include <fstream>
 #include <windows.h>
 using namespace std;
-
 typedef string& sLink;
 typedef string* sPtr;
 int RegexFind(string s, string pattern);
 void Replace(sLink s, string pattern, string replacer);
 vector<string> SaveSplit(string str, string pattern);
 vector<string> Split(string str, string pattern);
-
 int Quit();
 
 #endif
