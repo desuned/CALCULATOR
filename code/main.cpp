@@ -67,7 +67,7 @@ int main() {
                 string x = "";
                 getInit(x);
                 if (!FoolProof.AllCorrect(&x)) {
-                    printf("\n\n Equation's wrong!");
+                    printf("\n\n Equation's wrong!\n");
                     system("pause");
                 }
                 else {

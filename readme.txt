@@ -1,7 +1,10 @@
 Name: Finnaly work
-0)Fix file error
+0)Fix "Hello world"
+1)correct some code in FoolProof
 Future:
-	Working with file
+	-
+Feature:
+	Remove easter egg "Hello world"(
 Legends:
 	Folder: #FolderName#
 

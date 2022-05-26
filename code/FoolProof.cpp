@@ -129,8 +129,8 @@ int FoolProof::AllCorrect(sPtr eqPtr) {
 	this->eqPtr = eqPtr;
 	this->GlobalReplace();
 	if (!(this->IsntEmpty())) return 0;
-	if (!(this->NoIncorrectSymbols(1))) return 0; 
-	if (!(this->PointsCorrect(1))) return 0; 
+	if (!(this->NoIncorrectSymbols(0))) return 0; 
+	if (!(this->PointsCorrect(0))) return 0; 
 	if (!(this->EqualBrackets())) return 0; 
 	if (!(this->SignsCorrect())) return 0; 
 	if (!(this->ArgumentsExist())) return 0; 
